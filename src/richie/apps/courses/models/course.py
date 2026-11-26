@@ -629,7 +629,12 @@ class Course(EsIdMixin, BasePageExtension):
         best_run = None
         course_runs = self.course_runs.only(
             "start", "end", "enrollment_start", "enrollment_end"
-        ).exclude(catalog_visibility=CourseRunCatalogVisibility.HIDDEN)
+        ).exclude(
+            catalog_visibility__in=[
+                CourseRunCatalogVisibility.HIDDEN,
+                CourseRunCatalogVisibility.COURSE_ONLY,
+            ]
+        )
 
         for course_run in course_runs:
             state = course_run.state
