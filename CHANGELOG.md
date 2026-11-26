@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Align the batch order payment button in the dashboard
 - Show the payment button on batch orders with a failed card payment
 
 ## [3.6.0] - 2026-11-25
