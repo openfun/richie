@@ -132,7 +132,7 @@ export const DashboardItemBatchOrder = ({
         imageUrl={batchOrder.offering?.course.cover?.src}
         footer={
           <div className="dashboard-item-order__footer">
-            <div className="dashboard-item__block__status">
+            <div className="dashboard-item__block__status dashboard-item__block__status--wrap">
               {batchOrder.state && (
                 <Badge color="primary">
                   <div className="dashboard-item__block__status__badge">
