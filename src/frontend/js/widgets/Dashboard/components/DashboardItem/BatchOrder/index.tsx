@@ -117,9 +117,11 @@ export const DashboardItemBatchOrder = ({
 }) => {
   const intl = useIntl();
   const needsPayment =
-    (batchOrder.state === BatchOrderState.PENDING ||
-      batchOrder.state === BatchOrderState.PROCESS_PAYMENT) &&
-    batchOrder.payment_method === PaymentMethod.CARD_PAYMENT;
+    [
+      BatchOrderState.PENDING,
+      BatchOrderState.PROCESS_PAYMENT,
+      BatchOrderState.FAILED_PAYMENT,
+    ].includes(batchOrder.state) && batchOrder.payment_method === PaymentMethod.CARD_PAYMENT;
 
   return (
     <div className="dashboard-item-order">
@@ -130,7 +132,7 @@ export const DashboardItemBatchOrder = ({
         imageUrl={batchOrder.offering?.course.cover?.src}
         footer={
           <div className="dashboard-item-order__footer">
-            <div className="dashboard-item__block__status">
+            <div className="dashboard-item__block__status dashboard-item__block__status--wrap">
               {batchOrder.state && (
                 <Badge color="primary">
                   <div className="dashboard-item__block__status__badge">

@@ -8,7 +8,10 @@ interface DashboardSubItemProps {
 
 export const DashboardSubItem = (props: DashboardSubItemProps) => {
   return (
-    <div className={'dashboard-sub-item ' + props.className} data-testid="dashboard-sub-item">
+    <div
+      className={['dashboard-sub-item', props.className].filter(Boolean).join(' ')}
+      data-testid="dashboard-sub-item"
+    >
       <header className="dashboard-sub-item__header">
         <h6>{props.title}</h6>
       </header>

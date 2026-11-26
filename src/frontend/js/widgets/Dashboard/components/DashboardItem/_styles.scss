@@ -65,6 +65,13 @@
         margin-bottom: 0.5rem;
       }
 
+      // Badge and information items on a single line: center them
+      // vertically and let them wrap on small screens.
+      &--wrap {
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
       &__badge {
         padding: 0.25rem;
         display: flex;
@@ -89,6 +96,7 @@
       gap: 0.25rem;
       margin: 0 0.5rem;
       text-align: center;
+      white-space: nowrap;
       align-items: center;
       align-content: center;
       justify-content: center;
@@ -172,6 +180,10 @@
 
 .dashboard-item__action-button {
   align-self: flex-end;
+
+  @include media-breakpoint-down(sm) {
+    align-self: stretch;
+  }
 }
 
 .dashboard-item__course-enrolling {

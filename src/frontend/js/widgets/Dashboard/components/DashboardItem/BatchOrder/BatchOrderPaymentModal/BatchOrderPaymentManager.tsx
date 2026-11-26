@@ -48,7 +48,13 @@ export const BatchOrderPaymentManager = ({ batchOrder }: BatchPaymentManagerProp
           footer={
             <div className="content">
               <FormattedMessage {...messages.batchOrderPayment} />
-              <Button size="small" color="brand" variant="primary" onClick={retryModal.open}>
+              <Button
+                size="small"
+                color="brand"
+                variant="primary"
+                className="dashboard-item__action-button"
+                onClick={retryModal.open}
+              >
                 <FormattedMessage
                   {...messages.paymentNeededButton}
                   values={{
