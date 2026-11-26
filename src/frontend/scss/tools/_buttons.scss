@@ -50,9 +50,10 @@
 
   font-family: $font-family;
   font-weight: $font-weight;
+  line-height: $line-height;
   text-align: $text-align;
   user-select: none;
-  @include button-size($padding-y, $padding-x, $font-size, $line-height, $patched-radius);
+  @include button-size($padding-y, $padding-x, $font-size, $patched-radius);
   @include transition($transition);
 
   // Apply non default form factor radius behaviors
@@ -64,7 +65,7 @@
     border-radius: 0;
   }
 
-  @include hover {
+  &:hover {
     color: $font-color;
     text-decoration: none;
   }
