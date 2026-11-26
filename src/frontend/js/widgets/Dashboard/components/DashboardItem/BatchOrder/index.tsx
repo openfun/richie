@@ -117,9 +117,11 @@ export const DashboardItemBatchOrder = ({
 }) => {
   const intl = useIntl();
   const needsPayment =
-    (batchOrder.state === BatchOrderState.PENDING ||
-      batchOrder.state === BatchOrderState.PROCESS_PAYMENT) &&
-    batchOrder.payment_method === PaymentMethod.CARD_PAYMENT;
+    [
+      BatchOrderState.PENDING,
+      BatchOrderState.PROCESS_PAYMENT,
+      BatchOrderState.FAILED_PAYMENT,
+    ].includes(batchOrder.state) && batchOrder.payment_method === PaymentMethod.CARD_PAYMENT;
 
   return (
     <div className="dashboard-item-order">
