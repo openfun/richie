@@ -35,6 +35,12 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
         edit = request.toolbar and request.toolbar.edit_mode_active
         user_infos = request.GET.dict()
 
+        # Never trust the client supplied "user_id" for an authenticated user. Binding it to
+        # the session identity prevents a user from impersonating another user in the LTI
+        # launch that is signed server side with the provider shared secret.
+        if request.user.is_authenticated:
+            user_infos["user_id"] = request.user.get_username()
+
         if user_infos.get("user_id") is None:
             return Response({"user_id": ["This parameter is required."]}, status=400)
 
