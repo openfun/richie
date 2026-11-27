@@ -1,0 +1,368 @@
+// Basic functions must be loaded before settings to be able to use them from
+// settings and objects
+@import './tools/rem';
+@import './tools/colors';
+
+// Our variables must be imported before Bootstrap code so they can override it
+@import './settings/fonts';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+// Design color stuff
+@import './colors/palette';
+@import './colors/gradients';
+@import './colors/schemes';
+@import './colors/theme';
+@import './settings/variables';
+
+// TWITTER BOOTSTRAP V4
+// Required
+@import 'bootstrap/scss/bootstrap-reboot.scss';
+
+// Only what we use
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/utilities/text';
+
+// Internal addons (import order does matter due to some mixin usage from
+// deeper mixins)
+@import './tools/index';
+
+// Generic stuff
+@import './generic/background';
+@import './generic/background';
+@import './generic/type';
+@import './generic/images';
+@import './generic/accessibility';
+@import './generic/icons';
+
+// Shared object styles
+@import './objects/buttons';
+@import './objects/characteristics';
+
+@import './components/templates/courses/plugins/licence_plugin';
+
+// Disable inline style for CMS toolbox
+html {
+    margin-top: 0 !important;
+}
+
+// Common objects that don't fit to print
+#cms-top,
+.topbar__menu,
+.topbar__hamburger,
+.breadcrumbs,
+#site-footer {
+  display: none;
+}
+
+// Get a little space to distinct logo
+#site-header {
+  margin-bottom: 1.5rem;
+}
+
+// Sub header adjustments
+.subheader {
+  $subheader-selector: &;
+
+  &__title {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__code {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: -1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  // Video teaser is useless
+  &__teaser {
+    display: none;
+  }
+
+  &__media {
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  &--alternative {
+    #{$subheader-selector}__container {
+      border-top: 0;
+    }
+  }
+}
+
+// Enforce global anti page break in content
+p,
+img {
+  break-inside: avoid !important;
+  display: block !important;
+}
+
+.category-badge-list {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: stretch;
+  list-style-type: none;
+
+  &__container {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: stretch;
+    list-style-type: none;
+  }
+
+  .category-badge {
+    background-color: transparent;
+    border: 0;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: $font-weight-boldest;
+    text-align: center;
+    user-select: none;
+    padding: 0;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+    align-items: center;
+
+    &__title {
+      font-family: inherit;
+      font-weight: inherit;
+      color: inherit;
+    }
+
+    &__icon {
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: auto;
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      margin-left: 0.25rem;
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+
+// We do not want badges
+.social-network-badges {
+  display: none;
+}
+
+// Adjust course detail
+.course-detail {
+  $detail-selector: &;
+  margin: 0 auto;
+  padding: 0;
+
+  &__aside {
+    display: none;
+  }
+
+  &__block {
+    $sel: &;
+    margin: 0;
+    padding: 1rem 0;
+  }
+
+  &__row {
+    $sel: &;
+    font-size: 1rem;
+    margin: 0 auto;
+    max-width: none;
+    padding-bottom: 1rem;
+    position: relative;
+    padding: 0 0 1rem 0;
+
+    // Enforce anti breaking space because of inherited rules from mixin
+    p {
+      break-inside: avoid;
+      display: block;
+    }
+
+    & > p:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__content {
+    .course-detail__row {
+      break-inside: avoid;
+      display: block;
+    }
+  }
+
+  &__runs {
+    display: none;
+  }
+}
+
+.nested-item {
+  $sel: &;
+
+  &__title {
+    font-weight: $font-weight-bold;
+    background: none;
+    border: 0;
+  }
+}
+
+.glimpse-row_full {
+  @include sv-flex(1, 0, calc(100% - 1rem));
+  break-inside: avoid;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 0.5rem;
+
+  &__media {
+    @include sv-flex(1, 0, 12.5rem);
+    margin-right: 1rem;
+    margin-bottom: 0;
+
+    img {
+      border-radius: 0.25rem;
+      display: block;
+      height: auto;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+  }
+}
+
+.glimpse-card_square {
+  @include sv-flex(1, 0, calc(50% - 1rem));
+  break-inside: avoid;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0.5rem;
+}
+
+.organization-glimpse {
+  &__content {
+    display: none;
+  }
+}
+
+.course-detail__team {
+  break-inside: avoid;
+
+  .section__items {
+    break-inside: avoid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.5rem 0;
+
+    .person-glimpse {
+      @include sv-flex(1, 0, calc(50% - 1rem));
+      break-inside: avoid;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin: 0.5rem;
+
+      &__wrapper {
+        & > a {
+          color: inherit;
+        }
+      }
+
+      .category-tag {
+        color: inherit;
+      }
+
+      &__media {
+        @include sv-flex(0, 1, 100%);
+        display: block;
+        position: relative;
+        margin: 0 0 1rem 0;
+
+        img {
+          margin: 0 auto;
+          max-width: rem-calc(100px);
+          border-radius: 100%;
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+.course-detail__organizations {
+  break-inside: avoid;
+
+  .section__items {
+    break-inside: avoid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.5rem 0;
+
+    .organization-glimpse {
+      @include sv-flex(1, 0, calc(33.3333% - 1rem));
+      margin: 0.5rem;
+      break-inside: avoid;
+    }
+  }
+}
+
+.course-detail__information {
+  .section__row {
+    break-inside: avoid;
+  }
+
+  .section__items {
+    break-inside: avoid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+}
+
+.course-detail__license {
+  break-inside: avoid;
+
+  .course-detail__item {
+    break-inside: avoid;
+    padding: 0.5rem 0;
+  }
+}
+
+.licence-plugin {
+  &__content {
+    color: $black;
+  }
+
+  &__description {
+    color: $black;
+  }
+}
